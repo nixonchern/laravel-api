@@ -1,0 +1,136 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Документация к api 'Заявки'",
+        "version": "0.1"
+    },
+    "paths": {
+        "api/requests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Заявки от клиентов",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Атрибут для сортировки, по умолчанию 'status'"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Метод сортировки, по умолчанию 'desc'"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Кол-во извлекаемых объектов, по умолчанию '5'"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AuthenticateApi": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Создание заявки",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "api/requests/{clientRequests}": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Информация о заявке",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AuthenticateApi": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Ответ на заявку",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AuthenticateApi": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Удаление заявки",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "AuthenticateApi": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "AuthenticateApi": {
+                "type": "http",
+                "description": "Токен авторизации",
+                "name": "Token",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
