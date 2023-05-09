@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\ClientRequestsStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequestsStoreRequest;
 use App\Http\Requests\ClientRequestsUpdateRequest;
+use App\Http\Resources\ClientRequestsCollection;
 use App\Http\Resources\ClientRequestsResource;
 use App\Mail\SendClientRequestsAnswerMail;
 use App\Models\ClientRequests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ClientRequestsController extends Controller
@@ -49,9 +48,9 @@ class ClientRequestsController extends Controller
     {
         $clientRequests = ClientRequests::with('user')
         ->orderBy(request('sort', 'status'), request('order', 'desc'))
-        ->limit(request('limit', '5'));
+        ->paginate(request('per_page', 5));
 
-        return ClientRequestsResource::collection($clientRequests->get());
+        return new ClientRequestsCollection($clientRequests);
     }
 
     /**
