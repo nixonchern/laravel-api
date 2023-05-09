@@ -12,6 +12,7 @@
                 ],
                 "summary": "Заявки от клиентов",
                 "description": "",
+                "operationId": "7c02d9449f64f052ec2053890cb639ac",
                 "parameters": [
                     {
                         "name": "sort",
@@ -49,6 +50,7 @@
                 ],
                 "summary": "Создание заявки",
                 "description": "",
+                "operationId": "0c374e5dd24ff6146995ab622b966489",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -66,6 +68,7 @@
                 ],
                 "summary": "Информация о заявке",
                 "description": "",
+                "operationId": "287113aac2f8162d467d051a37816a05",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -86,6 +89,7 @@
                 ],
                 "summary": "Ответ на заявку",
                 "description": "",
+                "operationId": "7c9c3dac7d94dac6405172b7af1af221",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -106,6 +110,7 @@
                 ],
                 "summary": "Удаление заявки",
                 "description": "",
+                "operationId": "1f9633c8b361442780ea53217268037a",
                 "responses": {
                     "200": {
                         "description": "OK",

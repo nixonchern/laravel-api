@@ -11,94 +11,40 @@ use App\Mail\SendClientRequestsAnswerMail;
 use App\Models\ClientRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-/**
- * @OA\GET(
- *     path="api/requests",
- *     security={{ "AuthenticateApi": {} }},
- *     summary="Заявки от клиентов",
- *     description="",
- *     tags={"Requests"},
- *     @OA\Parameter(
- *          name="sort",
- *          in="query",
- *          description="Атрибут для сортировки, по умолчанию 'status'",
- *     ),
- *     @OA\Parameter(
- *          name="order",
- *          in="query",
- *          description="Метод сортировки, по умолчанию 'desc'",
- *     ),
- *     @OA\Parameter(
- *          name="limit",
- *          in="query",
- *          description="Кол-во извлекаемых объектов, по умолчанию '5'",
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="OK",
- *         @OA\MediaType(
- *              mediaType="application/json",
- *         )
- *     ),
- * ),
- * @OA\GET(
- *      path="api/requests/{clientRequests}",
- *      security={{ "AuthenticateApi": {} }},
- *      summary="Информация о заявке",
- *      description="",
- *      tags={"Requests"},
- *      @OA\Response(
- *          response=200,
- *          description="OK",
- *          @OA\MediaType(
- *              mediaType="application/json",
- *          )
- *      ),
- * ),
- * @OA\POST(
- *      path="api/requests",
- *      summary="Создание заявки",
- *      description="",
- *      tags={"Requests"},
- *      @OA\Response(
- *          response=200,
- *          description="OK",
- *          @OA\MediaType(
- *              mediaType="application/json",
- *          )
- *      ),
- * ),
- * @OA\PUT(
- *      path="api/requests/{clientRequests}",
- *      security={{ "AuthenticateApi": {} }},
- *      summary="Ответ на заявку",
- *      description="",
- *      tags={"Requests"},
- *      @OA\Response(
- *          response=200,
- *          description="OK",
- *          @OA\MediaType(
- *              mediaType="application/json",
- *          )
- *      ),
- * ),
- * @OA\DELETE(
- *      path="api/requests/{clientRequests}",
- *      security={{ "AuthenticateApi": {} }},
- *      summary="Удаление заявки",
- *      description="",
- *      tags={"Requests"},
- *      @OA\Response(
- *          response=200,
- *          description="OK",
- *          @OA\MediaType(
- *              mediaType="application/json",
- *          )
- *      ),
- * ),
- */
+
 class ClientRequestsController extends Controller
 {
+    /**
+        *@OA\GET(
+        *   path="api/requests",
+        *   security={{ "AuthenticateApi": {} }},
+        *   summary="Заявки от клиентов",
+        *   description="",
+        *   tags={"Requests"},
+        *   @OA\Parameter(
+        *       name="sort",
+        *       in="query",
+        *       description="Атрибут для сортировки, по умолчанию 'status'",
+        *   ),
+        *   @OA\Parameter(
+        *       name="order",
+        *       in="query",
+        *       description="Метод сортировки, по умолчанию 'desc'",
+        *   ),
+        *   @OA\Parameter(
+        *       name="limit",
+        *       in="query",
+        *       description="Кол-во извлекаемых объектов, по умолчанию '5'",
+        *   ),
+        *   @OA\Response(
+        *      response=200,
+        *      description="OK",
+        *      @OA\MediaType(
+        *           mediaType="application/json",
+        *      )
+        *   ),
+        * ),
+    */
     public function index()
     {
         $clientRequests = ClientRequests::query();
@@ -109,8 +55,20 @@ class ClientRequestsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+        *@OA\POST(
+        *   path="api/requests",
+        *   summary="Создание заявки",
+        *   description="",
+        *   tags={"Requests"},
+        *   @OA\Response(
+        *       response=200,
+        *       description="OK",
+        *       @OA\MediaType(
+        *           mediaType="application/json",
+        *       )
+        *   ),
+        *),
+    */
     public function store(ClientRequestsStoreRequest $request)
     {
         $clientRequests = ClientRequests::create($request->validated());
@@ -119,17 +77,42 @@ class ClientRequestsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
+        *@OA\GET(
+        *   path="api/requests/{clientRequests}",
+        *   security={{ "AuthenticateApi": {} }},
+        *   summary="Информация о заявке",
+        *   description="",
+        *   tags={"Requests"},
+        *   @OA\Response(
+        *       response=200,
+        *       description="OK",
+        *       @OA\MediaType(
+        *           mediaType="application/json",
+        *       )
+        *   ),
+        *),
+    */
     public function show(ClientRequests $clientRequests)
     {
-        // var_dump($clientRequests);
         return new ClientRequestsResource($clientRequests);
     }
 
     /**
-     * Update the specified resource in storage.
-     */
+        *@OA\PUT(
+        *   path="api/requests/{clientRequests}",
+        *   security={{ "AuthenticateApi": {} }},
+        *   summary="Ответ на заявку",
+        *   description="",
+        *   tags={"Requests"},
+        *   @OA\Response(
+        *       response=200,
+        *       description="OK",
+        *       @OA\MediaType(
+        *           mediaType="application/json",
+        *       )
+        *   ),
+        *),
+    */
     public function update(ClientRequestsUpdateRequest $request, ClientRequests $clientRequests)
     {
         $clientRequests->setAnswer($request->validated());
@@ -138,8 +121,21 @@ class ClientRequestsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
+        *@OA\DELETE(
+        *   path="api/requests/{clientRequests}",
+        *   security={{ "AuthenticateApi": {} }},
+        *   summary="Удаление заявки",
+        *   description="",
+        *   tags={"Requests"},
+        *   @OA\Response(
+        *       response=200,
+        *       description="OK",
+        *       @OA\MediaType(
+        *           mediaType="application/json",
+        *       )
+        *   ),
+        *),
+    */
     public function destroy(ClientRequests $clientRequests)
     {
         $clientRequests->delete();
