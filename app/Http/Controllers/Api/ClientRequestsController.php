@@ -47,9 +47,9 @@ class ClientRequestsController extends Controller
     */
     public function index()
     {
-        $clientRequests = ClientRequests::query();
-        $clientRequests->orderBy(request('sort', 'status'), request('order', 'desc'));
-        $clientRequests->limit(request('limit', '5'));
+        $clientRequests = ClientRequests::with('user')
+        ->orderBy(request('sort', 'status'), request('order', 'desc'))
+        ->limit(request('limit', '5'));
 
         return ClientRequestsResource::collection($clientRequests->get());
     }
