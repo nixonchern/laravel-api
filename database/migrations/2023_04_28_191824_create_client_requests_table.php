@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->enum('status', array_column(ClientRequestsStatusEnum::cases(), 'value'))->default('Active');
+            $table->enum('status', array_column(ClientRequestsStatusEnum::cases(), 'value'))->default(ClientRequestsStatusEnum::Resolved);
             $table->text('message');
             $table->text('comment')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
