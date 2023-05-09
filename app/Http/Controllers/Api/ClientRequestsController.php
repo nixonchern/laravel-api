@@ -31,9 +31,14 @@ class ClientRequestsController extends Controller
         *       description="Метод сортировки, по умолчанию 'desc'",
         *   ),
         *   @OA\Parameter(
-        *       name="limit",
+        *       name="per_page",
         *       in="query",
         *       description="Кол-во извлекаемых объектов, по умолчанию '5'",
+        *   ),
+        *   @OA\Parameter(
+        *       name="page",
+        *       in="query",
+        *       description="Страница пагинации",
         *   ),
         *   @OA\Response(
         *      response=200,
@@ -115,7 +120,7 @@ class ClientRequestsController extends Controller
     public function update(ClientRequestsUpdateRequest $request, ClientRequests $clientRequests)
     {
         $clientRequests->setAnswer($request->validated());
-        Mail::to('nixonchern@mail.ru')->send(new SendClientRequestsAnswerMail($clientRequests->comment));
+        Mail::to($clientRequests->mail)->send(new SendClientRequestsAnswerMail($clientRequests->comment));
         return new ClientRequestsResource($clientRequests);
     }
 
