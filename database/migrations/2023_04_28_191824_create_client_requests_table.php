@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->enum('status', array_column(ClientRequestsStatusEnum::cases(), 'value'))->default(ClientRequestsStatusEnum::Resolved);
+            $table->enum('status', array_column(ClientRequestsStatusEnum::cases(), 'value'))->default(ClientRequestsStatusEnum::Active->value);
             $table->text('message');
             $table->text('comment')->nullable();
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
 
