@@ -21,8 +21,8 @@ class ClientRequestsResource extends JsonResource
             "status"     => $this->status,
             "message"    => $this->message,
             "comment"    => $this->comment,
-            "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at,
+            "createdAt" => $this->created_at,
+            "updatedAt" => $this->updated_at,
             "user"       => new UserResource($this->user),
         ];
     }
