@@ -7,12 +7,16 @@ use App\Http\Requests\ClientRequestsStoreRequest;
 use App\Http\Requests\ClientRequestsUpdateRequest;
 use App\Http\Resources\ClientRequestsCollection;
 use App\Http\Resources\ClientRequestsResource;
-use App\Mail\SendClientRequestsAnswerMail;
-use App\Models\ClientRequests;
-use Illuminate\Support\Facades\Mail;
+use App\Services\ClientRequestService;
+
 
 class ClientRequestsController extends Controller
 {
+    private ClientRequestService $service;
+    public function __construct(ClientRequestService $service)
+    {
+        $this->service = $service;
+    }
     /**
         *@OA\GET(
         *   path="api/requests",
@@ -51,11 +55,14 @@ class ClientRequestsController extends Controller
     */
     public function index()
     {
-        $clientRequests = ClientRequests::with('user')
-        ->orderBy(request('sort', 'status'), request('order', 'desc'))
-        ->paginate(request('per_page', 5));
-
-        return new ClientRequestsCollection($clientRequests);
+        $clientRequestPaginate = $this->service->getAllWithPaginate(
+            request('sort', 'status'), 
+            request('order', 'desc'), 
+            request('per_page', 5), 
+            request('page', 1)
+        );
+        
+        return new ClientRequestsCollection($clientRequestPaginate);
     }
 
     /**
@@ -75,9 +82,14 @@ class ClientRequestsController extends Controller
     */
     public function store(ClientRequestsStoreRequest $request)
     {
-        $clientRequests = ClientRequests::create($request->validated());
+        $requestValidated = $request->validated();
+        try {
+            $newClientRequest = $this->service->create($requestValidated['name'], $requestValidated['email'], $requestValidated['message']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
 
-        return  new ClientRequestsResource($clientRequests);
+        return  new ClientRequestsResource( $newClientRequest );
     }
 
     /**
@@ -96,9 +108,14 @@ class ClientRequestsController extends Controller
         *   ),
         *),
     */
-    public function show(ClientRequests $clientRequests)
+    public function show(int $id)
     {
-        return new ClientRequestsResource($clientRequests);
+        $clientRequest = $this->service->getById($id);
+        if(!$clientRequest){
+            return response()->json(['message' => "Не найден 'запрос' с идентификатором: $id"], 404);
+        }
+        
+        return new ClientRequestsResource( $clientRequest );
     }
 
     /**
@@ -117,11 +134,17 @@ class ClientRequestsController extends Controller
         *   ),
         *),
     */
-    public function update(ClientRequestsUpdateRequest $request, ClientRequests $clientRequests)
+    public function update(ClientRequestsUpdateRequest $request, int $id)
     {
-        $clientRequests->setAnswer($request->validated());
-        Mail::to($clientRequests->mail)->send(new SendClientRequestsAnswerMail($clientRequests->comment));
-        return new ClientRequestsResource($clientRequests);
+        $requestValidated = $request->validated();
+        try {
+            $clientRequest = $this->service->setAnswerById($id, $requestValidated['user_id'], $requestValidated['comment']);
+        } catch (\Exception $e) {
+            
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
+        
+        return new ClientRequestsResource($clientRequest);
     }
 
     /**
@@ -140,9 +163,13 @@ class ClientRequestsController extends Controller
         *   ),
         *),
     */
-    public function destroy(ClientRequests $clientRequests)
+    public function destroy(int $id)
     {
-        $clientRequests->delete();
+        try {
+            $this->service->deleteById($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
 
         return response(null, 204);
     }

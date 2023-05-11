@@ -20,8 +20,7 @@ return new class extends Migration
             $table->enum('status', array_column(ClientRequestsStatusEnum::cases(), 'value'))->default(ClientRequestsStatusEnum::Active->value);
             $table->text('message');
             $table->text('comment')->nullable();
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamps();
             $table->foreignId('user_id')->nullable()->constrained();
 
             $table->index('status');

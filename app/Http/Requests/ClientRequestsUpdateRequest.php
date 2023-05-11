@@ -22,8 +22,8 @@ class ClientRequestsUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'comment' => '',
-            'user_id' => ''
+            'comment' => 'required|string',
+            'user_id' => 'required|exists:App\Models\User,id'
         ];
     }
 }

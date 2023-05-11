@@ -14,13 +14,6 @@ class ClientRequests extends Model
 
     protected $fillable = ['name', 'email', 'message', 'comment', 'user_id'];
 
-    public function setAnswer($request){
-        $this->comment = $request['comment'];
-        $this->user_id = $request['user_id'];
-        $this->status = ClientRequestsStatusEnum::Resolved;
-        $this->save();
-    }
-
     public function user(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
